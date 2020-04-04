@@ -1,0 +1,14 @@
+beautifulsoup4==4.8.2
+bs4==0.0.1
+Flask==1.1.1
+jsonify==0.5
+jsonschema==3.2.0
+oauthlib==3.1.0
+openpyxl==3.0.3
+packaging==20.1
+pandas==1.0.1
+pandocfilters==1.4.2
+pyarrow==0.16.0
+requests==2.23.0
+simplejson==3.17.0
+urllib3==1.25.8
