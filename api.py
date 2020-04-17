@@ -92,6 +92,8 @@ def sync_news(URL):
 	news_all = pd.concat([news_agg,news_agg_old]).drop_duplicates().reset_index(drop=True)
 	similar_all = pd.concat([similar_agg,similar_agg_old]).drop_duplicates().reset_index(drop=True)
 	
+	similar_all = similar_all.drop_duplicates(subset='news_url_sim', keep='first')
+	similar_all.reset_index(drop=True, inplace=True)
 	similar_all["sim_id"] = similar_all.index
 	
 	merged_news = pd.merge(news_all,similar_all, on="news_id", how="left")
@@ -113,15 +115,21 @@ URL = "https://pulse.zerodha.com"
 
 @app.route('/')
 def home():
-	return render_template("home.html")
+	news_agg = pd.read_feather("news_all.feather")
+	similar_agg = pd.read_feather("similar_all.feather")
+	news_count = len(news_agg)
+	sim_count = len(similar_agg)
+	return render_template("home.html", news_count=news_count, sim_count=sim_count )
 
 @app.route('/refresh')
 def refresh():
 	sync_news(URL)
 	news_agg = pd.read_feather("news_all.feather")
 	similar_agg = pd.read_feather("similar_all.feather")
-	print("News database refreshed at {}. Total news: {}. Similar news: {}".format((datetime.now().strftime("%I:%M:%S %p")),len(news_agg),len(similar_agg)))
-	return "News database refreshed at {}. Total news: {}. Similar news: {}".format((datetime.now().strftime("%I:%M:%S %p")),len(news_agg),len(similar_agg))
+	news_count = len(news_agg)
+	sim_count = len(similar_agg)
+	print("News database refreshed at {}. Total news: {}. Similar news: {}".format((datetime.now().strftime("%I:%M:%S %p")),news_count,sim_count))
+	return "News database refreshed at {}. Total news: {}. Similar news: {}".format((datetime.now().strftime("%I:%M:%S %p")),news_count,sim_count)
 
 @app.route('/news-api', methods=['GET'])
 def news_api():
