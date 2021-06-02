@@ -11,4 +11,4 @@ pandocfilters==1.4.2
 pyarrow==0.16.0
 requests==2.23.0
 simplejson==3.17.0
-urllib3==1.25.8
+urllib3==1.26.5
